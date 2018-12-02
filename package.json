@@ -1,0 +1,36 @@
+{
+  "name": "node.js-mentoring-program",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --mode=development --config config/webpack.config.js app.js",
+    "start:prod": "webpack --mode=production --config config/webpack.config.js app.js" ,
+    "poststart:prod": "node build/bundle.js" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kartelpol/Node.js-mentoring-program.git"
+  },
+  "author": "Polina Kartel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kartelpol/Node.js-mentoring-program/issues"
+  },
+  "homepage": "https://github.com/kartelpol/Node.js-mentoring-program#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "clean-webpack-plugin": "^1.0.0",
+    "nodemon": "^1.18.7",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-shell-plugin": "^0.5.0"
+  }
+}
