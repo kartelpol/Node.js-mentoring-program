@@ -5,9 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --mode=development --config config/webpack.config.js app.js",
-    "start:prod": "webpack --mode=production --config config/webpack.config.js app.js" ,
-    "poststart:prod": "node build/bundle.js" 
+    "start": "webpack --mode=development --config config/webpack.config.js",
+    "start:prod": "webpack --mode=production --config config/webpack.config.js",
+    "poststart:prod": "node build/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,9 @@
     "url": "https://github.com/kartelpol/Node.js-mentoring-program/issues"
   },
   "homepage": "https://github.com/kartelpol/Node.js-mentoring-program#readme",
-  "dependencies": {},
+  "dependencies": {
+    "winston": "^3.1.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",

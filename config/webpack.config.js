@@ -14,12 +14,14 @@ const clean = new CleanWebpackPlugin(['build'], {
     root: PROJECT_ROOT,
 });
 
-module.exports = {
+module.exports = (env, argv) => ({
     entry: ENTRY_PATH,
     output: {
       path: BUILD_PATH,
       filename: 'bundle.js'
     },
+    
+    target: 'node',
     resolve: {
       extensions: ['.js', '.json'],
       alias: {
@@ -27,7 +29,9 @@ module.exports = {
         models: MODELS_PATH,
       }
     },
-    watch: this.mode === 'development',
+
+    watch: argv.mode === 'development',
+    
     module: {
       rules: [
         {
@@ -43,8 +47,8 @@ module.exports = {
     plugins: [
         clean,
         new WebpackShellPlugin({
-          onBuildEnd:  this.mode === 'development' && ['nodemon build/bundle.js --watch build']
+          onBuildEnd:  argv.mode === 'development' && ['nodemon build/bundle.js --watch build']
       })
     ],
-  };
+  });
   
