@@ -47,7 +47,7 @@ module.exports = (env, argv) => ({
     plugins: [
         clean,
         new WebpackShellPlugin({
-          onBuildEnd:  argv.mode === 'development' && ['nodemon build/bundle.js --watch build']
+          onBuildEnd:  argv.mode === 'development' && [`nodemon build/bundle.js  --watch build`]
       })
     ],
   });

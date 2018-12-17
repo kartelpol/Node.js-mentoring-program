@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/kartelpol/Node.js-mentoring-program#readme",
   "dependencies": {
+    "convert-csv-to-json": "0.0.13",
     "winston": "^3.1.0"
   },
   "devDependencies": {
