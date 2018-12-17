@@ -1,0 +1,17 @@
+#
+node_modules/
+#
+#
+#File with archives and objects, could be generated while code bundling
+*.[oa]
+#
+#
+# temporary files produced by lots of IDE's (Ecmas)
+*~
+#
+*.idea
+#
+#
+# bundled files
+dist/
+build/
