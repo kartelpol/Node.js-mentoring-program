@@ -1,6 +1,5 @@
 import logger from './config/logger';
 import convert from './src/utils/convertCsvToJson';
-import * as csvToJson from 'convert-csv-to-json';
 import * as config from './config/taskInfo.json';
 
 import { Product, User } from 'models';
@@ -16,19 +15,21 @@ const user = new User();
 const watchModule = new Dirwatcher();
 const importModule = new Importer();
 
-watchModule.on('changed', (path) => { 
-    importModule.import(path).then(dataArr => {
-        dataArr.forEach(data => logImports(data, 'ASYNC'))
-    })
-        .catch(err => logger.error(err));
-
-    const importedData = importModule.importSync(path);
-    //console.log(importedData);
-    logImports(importedData, 'SYNC');
-});
 
 watchModule.watch(process.argv.PATH = './data', process.argv.DELAY = 2500);
 
+watchModule.on('changed', (filesPaths) => { 
+    filesPaths.forEach(filePath => onFileChange(filePath));
+});
+
+
+function onFileChange(filePath) {
+    importModule.import(filePath).then(data => logImports(data, 'ASYNC'))
+        .catch(err => logger.error(err));
+
+    const importedData = importModule.importSync(filePath);
+    logImports(importedData, 'SYNC');
+}
 
 function logImports(data, method) {
     logger.info(`-------------------------${method}-----------------------------`);

@@ -2,36 +2,34 @@ import * as fs from 'fs';
 import * as util from 'util';
 import logger from '../config/logger.js';
 
-class importer {
-    import(files) {
-        const modifiedFiles = [];
+class Importer {
+
+    /**
+     * Import file at the given path asynchroniously 
+     * @param {string} filePath 
+     * @returns promise of the readed file
+     */
+    import(filePath) {
         const readFile = util.promisify(fs.readFile);
-
-        files.forEach((file) => {
-            const filePromise = readFile(file, 'utf8');  
-            modifiedFiles.push(filePromise);
-        });
-
-        return Promise.all(modifiedFiles);
+        
+        return readFile(filePath, 'utf8');  
     }
 
-    importSync(files) {
-        const modifiedData = [];
-
-        files.forEach((filename) => {
-            try {
-                const data = fs.readFileSync(filename, 'utf8');
-                modifiedData.push(data);
-            } 
-            catch(err) {
-                logger.error(`Error reading ${filename}`);
-                logger.error(err);
-                throw new Error(err);
-            }
-        });  
-
-        return modifiedData;
+    /**
+     * Import file at the given path synchroniously 
+     * @param {string} filePath 
+     * @returns readed file data
+     */
+    importSync(filePath) {
+        try {
+            const fileData = fs.readFileSync(filePath, 'utf8');
+            return fileData;
+        } 
+        catch(err) {
+            logger.error(err, `Error reading ${filePath}`);
+            throw new Error(err);
+        }
     }
 }
 
-export default importer;
+export default Importer;

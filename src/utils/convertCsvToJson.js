@@ -7,8 +7,12 @@ function convertCSVtoJS(data) {
     rows.forEach((row) => {
         const rowObj = {};
         const cells = row.split(',');
+
         cells.forEach((cell, index) => {
-            rowObj[(headers[headers[index] ? index : --index]).toString().trim()] = cell.toString().trim();
+            let key;
+            headers[index] ? key = headers[index] : key = 'N/A';
+           
+            rowObj[key.toString().trim()] = cell.toString().trim();
         });
         convertedData.push(rowObj);
     });
