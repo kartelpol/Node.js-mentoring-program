@@ -2,8 +2,11 @@ const { Writable } = require('stream');
 const { Transform } = require('stream');
 const { createReadStream, createWriteStream, readdir, access } = require('fs'); 
 const {join, relative, extname} = require('path');
+
 const csvToJsonConverter = require('csvtojson');
 const multistream = require('multistream');
+
+const errorMsgs = require('./errorMsgs');
 
 const BUNDLE_CSS_NAME = 'bundle.css';
 const FINAL_CSS_NAME = 'end-bundle-with-this.css';
@@ -52,7 +55,7 @@ function convertFromFile(filePath) {
             console.error(e);
         }
     } else {
-        console.error('FORMAT ERROR. EXPECTED .CSV FILE');
+        console.error(errorMsgs.params.wrong_extention('.csv'));
     }
 }
 
@@ -70,7 +73,7 @@ function convertToFile(filePath) {
             console.error(e);
         }
     } else {
-        console.error('FORMAT ERROR. EXPECTED .CSV FILE');
+        console.error(errorMsgs.params.wrong_extention('.csv'));
     }
 }
 
@@ -93,7 +96,7 @@ function getCssStreamsFromDir(dirPath) {
     return new Promise((resolve, reject) => {
         readdir(dirPath, (err, files) => {
             if (err) {
-                reject('Unable to scan directory: ' + err);
+                reject(errorMsgs.params.wrong_path + err);
             } 
 
             files.forEach(file => {
