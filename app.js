@@ -8,13 +8,13 @@ import Dirwatcher from './src/dirwatcher';
 import Importer from './src/importer';
 
 logger.info(config.name);
+console.log(process.argv);
 
 const product = new Product();
 const user = new User();
 
 const watchModule = new Dirwatcher();
 const importModule = new Importer();
-
 
 watchModule.watch(process.argv.PATH = './data', process.argv.DELAY = 2500);
 

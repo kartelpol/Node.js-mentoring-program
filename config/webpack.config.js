@@ -14,7 +14,8 @@ const clean = new CleanWebpackPlugin(['build'], {
     root: PROJECT_ROOT,
 });
 
-module.exports = (env, argv) => ({
+module.exports = (env, argv) => {console.log(argv); return({
+  
     entry: ENTRY_PATH,
     output: {
       path: BUILD_PATH,
@@ -47,8 +48,9 @@ module.exports = (env, argv) => ({
     plugins: [
         clean,
         new WebpackShellPlugin({
-          onBuildEnd:  argv.mode === 'development' && [`nodemon build/bundle.js  --watch build`]
+           onBuildEnd:  argv.mode === 'development' && 
+           [`nodemon build/bundle.js --watch`]
       })
     ],
-  });
+  })};
   
