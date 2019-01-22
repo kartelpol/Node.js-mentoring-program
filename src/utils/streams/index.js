@@ -10,14 +10,14 @@ function analyzeArgs (args) {
     if (process.argv[2] === '--help' || process.argv[2] === '-h' || process.argv.length == 2) {
         parser.printHelp();
     } else if (args.action && (process.argv[2].indexOf('--action=') == 0 || process.argv[2].indexOf('-a=') == 0)) {
-        checkAction(args);
+        checkAction(args.action);
     } else {
         printError(errorMsgs.params.wrong_format);
     }
 }
 
-function checkAction(args) {
-    switch (args.action) {
+function checkAction(chosenAction) {
+    switch (chosenAction) {
         case 'reverse':
             actions.reverse();
         break;
@@ -25,25 +25,25 @@ function checkAction(args) {
             actions.transform();
         break;
         case 'outputFile':
-            checkExtraParam('file', args);
+            checkExtraParam('file');
             actions.outputFile(args.file);
         break;
         case 'convertFromFile':
-            checkExtraParam('file', args);
+            checkExtraParam('file');
             actions.convertFromFile(args.file);
         break;
         case'convertToFile':
-            checkExtraParam('file', args);
+            checkExtraParam('file');
             actions.convertToFile(args.file);
         break;
         case'cssBundler':
-            checkExtraParam('path', args);
+            checkExtraParam('path');
             actions.buildCss(args.path);
         break;
     }
 }
 
-function checkExtraParam(param, args) {
+function checkExtraParam(param) {
     if (!args[param]) {
         printError(errorMsgs.params.wrong_number(param));        
     }

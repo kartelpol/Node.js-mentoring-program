@@ -1,9 +1,8 @@
-const { Writable } = require('stream');
-const { Transform } = require('stream');
-const { createReadStream, createWriteStream, readdir, access } = require('fs'); 
-const {join, relative, extname} = require('path');
+const { createReadStream, createWriteStream, readdir } = require('fs'); 
+const { join, relative, extname } = require('path');
 
 const csvToJsonConverter = require('csvtojson');
+const through2 = require('through2');
 const multistream = require('multistream');
 
 const errorMsgs = require('./errorMsgs');
@@ -11,63 +10,67 @@ const errorMsgs = require('./errorMsgs');
 const BUNDLE_CSS_NAME = 'bundle.css';
 const FINAL_CSS_NAME = 'end-bundle-with-this.css';
 
-function reverse() {
-    const outStream = new Writable({
-        write(chunk, encoding, callback) {
-          process.stdout.write(chunk.toString().split("").reverse().join(""));
-          callback();
-        }
-    });
-      
-    process.stdin.pipe(outStream);
+function reverse() {   
+    process.stdin
+        .pipe(through2(reverseData))
+        .pipe(process.stdout);
 }
 
-function transform() {
-    const upperCaseTransformingStream = new Transform({
-        transform(chunk, encoding, callback) {
-          this.push(chunk.toString().toUpperCase());
-          callback();
-        }
-      });
-      
-      process.stdin.pipe(upperCaseTransformingStream).pipe(process.stdout);
+function reverseData(chunk, enc, next) {
+    const reversedData = chunk
+        .toString()
+        .split("")
+        .reverse()
+        .join("");
+
+        this.push(reversedData);
+        next();
+}
+
+function transform() {   
+      process.stdin
+        .pipe(through2(transformData))
+        .pipe(process.stdout);
+}
+
+function transformData(chunk, enc, next) {
+    const transformedData = chunk
+        .toString()
+        .toUpperCase();
+
+        this.push(transformedData);
+        next();
 }
 
 function outputFile(filePath) {
     filePath = join(__dirname, filePath);
 
     try {
-        const src = createReadStream(filePath);
-        src.pipe(process.stdout);
+        const inputStream = createReadStream(filePath);
+        inputStream.pipe(process.stdout);
     } catch (e) {
         console.error(e);
     }
 }
 
 function convertFromFile(filePath) {
-    filePath = join(__dirname, filePath);
-
-    if (extname(filePath) === '.csv') {
-        try {
-            const readStream = createReadStream(filePath);
-            readStream.pipe(csvToJsonConverter()).pipe(process.stdout);            
-        } catch(e) {
-            console.error(e);
-        }
-    } else {
-        console.error(errorMsgs.params.wrong_extention('.csv'));
-    }
+    streamJSONFromCSVFile(filePath, process.stdout);
 }
 
 function convertToFile(filePath) {
-    filePath = join(__dirname, filePath);
     const outputFile = `${filePath.slice(0, filePath.indexOf('.csv'))}.json`;
+    const writeStream = createWriteStream(outputFile);
+    
+    streamJSONFromCSVFile(filePath, writeStream);
+}
 
-    if (extname(filePath) === '.csv') {
+function streamJSONFromCSVFile(inputFilePath, outputStream) {
+    inputFilePath = join(__dirname, inputFilePath);
+
+    if (extname(inputFilePath) === '.csv') {
         try {
-            const readStream = createReadStream(filePath);
-            const writeStream = createWriteStream(outputFile);
-            readStream.pipe(csvToJsonConverter()).pipe(writeStream);
+            const readStream = createReadStream(inputFilePath);
+            readStream.pipe(csvToJsonConverter()).pipe(outputStream);
             
         } catch(e) {
             console.error(e);
@@ -75,25 +78,28 @@ function convertToFile(filePath) {
     } else {
         console.error(errorMsgs.params.wrong_extention('.csv'));
     }
-}
+} 
 
 async function buildCss(dirPath) {
     const relativeDirPath = relative(__dirname, dirPath);
     const outputFile = join(__dirname, relativeDirPath, BUNDLE_CSS_NAME);
     dirPath = join(__dirname, relativeDirPath);
 
-    const styleStreams = await getCssStreamsFromDir(dirPath);
-    styleStreams.push(getFinalCssStream());
- 
-    const writeStream = createWriteStream(outputFile);
-
-    multistream(styleStreams).pipe(writeStream);
+    try {
+        const styleStreams = await getCssStreamsFromDir(dirPath);
+        styleStreams.push(getFinalCssStream());
+        
+        const writeStream = createWriteStream(outputFile);
+        multistream(styleStreams).pipe(writeStream);
+    } catch(e) {
+        throw(e);
+    }
 }
 
 function getCssStreamsFromDir(dirPath) {
-    const styleStreams = [];
-
     return new Promise((resolve, reject) => {
+        const styleStreams = [];
+
         readdir(dirPath, (err, files) => {
             if (err) {
                 reject(errorMsgs.params.wrong_path + err);
@@ -114,8 +120,9 @@ function getCssStreamsFromDir(dirPath) {
 
 function getFinalCssStream() {
     const requestedCSSPath = join(__dirname, FINAL_CSS_NAME);
+
     try {
-        return readStream = createReadStream(requestedCSSPath);
+        return createReadStream(requestedCSSPath);
     } catch(e) {
         throw e;
     }

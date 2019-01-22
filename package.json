@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --mode=development --config config/webpack.config.js",
-    "start:prod": "webpack --mode=production --config config/webpack.config.js",
-    "poststart:prod": "node build/bundle.js",
+    "build": "webpack --mode=production --config config/webpack.config.js",
+    "postbuild": "node build/bundle.js",
+    "build:streams": "webpack --mode=production --config config/streams.webpack.config.js",
+    "postbuild:streams": "node build/streams.bundle.js",
     "jsdoc": "jsdoc src/"
   },
   "repository": {
@@ -23,6 +25,7 @@
   "dependencies": {
     "csvtojson": "^2.0.8",
     "multistream": "^2.1.1",
+    "through2": "^3.0.0",
     "winston": "^3.1.0"
   },
   "devDependencies": {

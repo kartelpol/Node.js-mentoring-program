@@ -8,7 +8,6 @@ import Dirwatcher from './src/dirwatcher';
 import Importer from './src/importer';
 
 logger.info(config.name);
-console.log(process.argv);
 
 const product = new Product();
 const user = new User();
@@ -21,7 +20,6 @@ watchModule.watch(process.argv.PATH = './data', process.argv.DELAY = 2500);
 watchModule.on('changed', (filesPaths) => { 
     filesPaths.forEach(filePath => onFileChange(filePath));
 });
-
 
 function onFileChange(filePath) {
     importModule.import(filePath).then(data => logImports(data, 'ASYNC'))

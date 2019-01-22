@@ -10,12 +10,11 @@ const PROJECT_ROOT = path.join(__dirname, '../');
 const SRC_PATH = path.resolve(__dirname, '../src');
 const MODELS_PATH = path.resolve(__dirname, '../src/models');
 
-const clean = new CleanWebpackPlugin(['build'], {
+const clean = new CleanWebpackPlugin(['build/bundle.js'], {
     root: PROJECT_ROOT,
 });
 
-module.exports = (env, argv) => {console.log(argv); return({
-  
+module.exports = (env, argv) => ({
     entry: ENTRY_PATH,
     output: {
       path: BUILD_PATH,
@@ -52,5 +51,5 @@ module.exports = (env, argv) => {console.log(argv); return({
            [`nodemon build/bundle.js --watch`]
       })
     ],
-  })};
+  });
   
