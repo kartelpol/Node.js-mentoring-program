@@ -15,3 +15,12 @@ node_modules/
 # bundled files
 dist/
 build/
+#
+#
+# log file
+*.log
+#
+#
+# jsdoc output
+out/
+#
