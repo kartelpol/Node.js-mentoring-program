@@ -5,11 +5,18 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --mode=development --config config/webpack.config.js",
-    "build": "webpack --mode=production --config config/webpack.config.js",
-    "postbuild": "node build/bundle.js",
+    
+    "start:fswatcher": "webpack --mode=development --config config/webpack.config.js",
+    "build:fswatcher": "webpack --mode=production --config config/webpack.config.js",
+    "postbuild:fswatcher": "node build/bundle.js",
+    
     "build:streams": "webpack --mode=production --config config/streams.webpack.config.js",
     "postbuild:streams": "node build/streams.bundle.js",
+    
+    "start:express": "webpack --mode=development --entry=./index.js --config=config/streams.webpack.config.js",
+    "build:express": "webpack --mode=production --entry=./index.js --config=config/streams.webpack.config.js",
+    "postbuild:express": "node build/bundle.js",
+    
     "jsdoc": "jsdoc src/"
   },
   "repository": {
@@ -37,6 +44,7 @@
     "argparse": "^1.0.10",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^1.0.0",
+    "express": "^4.16.4",
     "jsdoc": "^3.5.5",
     "nodemon": "^1.18.7",
     "webpack": "^4.26.1",

@@ -52,3 +52,10 @@ function checkExtraParam(param) {
 function printError(message) {
     throw new Error(message);
 }
+
+module.exports = {
+    analyzeArgs,
+    checkAction,
+    checkExtraParam,
+    printError
+}

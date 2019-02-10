@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const path = require('path');
 
-const ENTRY_PATH = path.join(__dirname, '../app.js');
+const ENTRY_PATH = path.join(__dirname, '../src/app.js');
 const BUILD_PATH = path.join(__dirname, '../build');
 const PROJECT_ROOT = path.join(__dirname, '../');
 
