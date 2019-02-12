@@ -12,7 +12,7 @@ function parseStringToArray(string, separator) {
 
     string.split(separator).forEach((pair) => {
         const parts = pair.split('=');
-        list[parts[0].trim()] = decodeURI(parts[1]);
+        list[parts[0].trim()] = decodeURI(parts[1].join('='));
     });
 
     return list;

@@ -3,7 +3,7 @@ function getAll(req, res) {
 }
 
 function get(req, res) {
-    res.send('SINGLE product');
+    res.send(`SINGLE product by id: ${req.params.id}`);
 }
 
 
@@ -12,7 +12,7 @@ function add(req, res) {
 }
 
 function getReviews(req, res) {
-    res.send('Product reviews');
+    res.send(`Product's with id: ${req.params.id} reviews`);
 }
 
 export default { getAll, get, add, getReviews}

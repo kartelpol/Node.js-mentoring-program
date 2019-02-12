@@ -1,6 +1,6 @@
 import logger from '../config/logger';
 import convert from './utils/convertCsvToJson';
-import * as config from './config/taskInfo.json';
+import * as config from '../config/taskInfo.json';
 
 import { Product, User } from 'models';
 
