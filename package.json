@@ -5,10 +5,15 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --mode=development --config config/webpack.config.js",
-    "start:prod": "webpack --mode=production --config config/webpack.config.js",
-    "poststart:prod": "node build/bundle.js",
-    "jsdoc":  "jsdoc src/"
+    "start:fswatcher": "webpack --mode=development --config config/webpack.config.js",
+    "build:fswatcher": "webpack --mode=production --config config/webpack.config.js",
+    "postbuild:fswatcher": "node build/bundle.js",
+    "build:streams": "webpack --mode=production --config config/streams.webpack.config.js",
+    "postbuild:streams": "node build/streams.bundle.js",
+    "start:express": "webpack --mode=development --entry=./index.js --config=config/webpack.config.js",
+    "build:express": "webpack --mode=production --entry=./index.js --config=config/webpack.config.js",
+    "postbuild:express": "node build/bundle.js",
+    "jsdoc": "jsdoc src/"
   },
   "repository": {
     "type": "git",
@@ -21,7 +26,9 @@
   },
   "homepage": "https://github.com/kartelpol/Node.js-mentoring-program#readme",
   "dependencies": {
-    "convert-csv-to-json": "0.0.13",
+    "csvtojson": "^2.0.8",
+    "multistream": "^2.1.1",
+    "through2": "^3.0.0",
     "winston": "^3.1.0"
   },
   "devDependencies": {
@@ -30,12 +37,15 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
     "@babel/register": "^7.0.0",
+    "argparse": "^1.0.10",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^1.0.0",
+    "express": "^4.16.4",
     "jsdoc": "^3.5.5",
     "nodemon": "^1.18.7",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2",
     "webpack-shell-plugin": "^0.5.0"
   }
 }

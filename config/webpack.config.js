@@ -1,16 +1,17 @@
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
+const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 
-const ENTRY_PATH = path.join(__dirname, '../app.js');
+const ENTRY_PATH = path.join(__dirname, '../src/app.js');
 const BUILD_PATH = path.join(__dirname, '../build');
 const PROJECT_ROOT = path.join(__dirname, '../');
 
 const SRC_PATH = path.resolve(__dirname, '../src');
 const MODELS_PATH = path.resolve(__dirname, '../src/models');
 
-const clean = new CleanWebpackPlugin(['build'], {
+const clean = new CleanWebpackPlugin(['build/bundle.js'], {
     root: PROJECT_ROOT,
 });
 
@@ -22,8 +23,9 @@ module.exports = (env, argv) => ({
     },
     
     target: 'node',
+    externals: [ nodeExternals() ],
     resolve: {
-      extensions: ['.js', '.json'],
+      extensions: [ '.js', '.json' ],
       alias: {
         src: SRC_PATH,
         models: MODELS_PATH,
@@ -33,6 +35,7 @@ module.exports = (env, argv) => ({
     watch: argv.mode === 'development',
     
     module: {
+      exprContextCritical: false,
       rules: [
         {
           test: /\.(js|jsx)$/,
@@ -47,7 +50,8 @@ module.exports = (env, argv) => ({
     plugins: [
         clean,
         new WebpackShellPlugin({
-          onBuildEnd:  argv.mode === 'development' && [`nodemon build/bundle.js  --watch build`]
+           onBuildEnd:  argv.mode === 'development' && 
+           [`nodemon build/bundle.js --watch`]
       })
     ],
   });

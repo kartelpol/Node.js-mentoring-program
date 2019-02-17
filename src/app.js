@@ -1,11 +1,11 @@
-import logger from './config/logger';
-import convert from './src/utils/convertCsvToJson';
-import * as config from './config/taskInfo.json';
+import logger from '../config/logger';
+import convert from './utils/convertCsvToJson';
+import * as config from '../config/taskInfo.json';
 
 import { Product, User } from 'models';
 
-import Dirwatcher from './src/dirwatcher';
-import Importer from './src/importer';
+import Dirwatcher from './dirwatcher';
+import Importer from './importer';
 
 logger.info(config.name);
 
@@ -15,13 +15,11 @@ const user = new User();
 const watchModule = new Dirwatcher();
 const importModule = new Importer();
 
-
 watchModule.watch(process.argv.PATH = './data', process.argv.DELAY = 2500);
 
 watchModule.on('changed', (filesPaths) => { 
     filesPaths.forEach(filePath => onFileChange(filePath));
 });
-
 
 function onFileChange(filePath) {
     importModule.import(filePath).then(data => logImports(data, 'ASYNC'))
