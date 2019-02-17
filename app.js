@@ -15,13 +15,11 @@ const user = new User();
 const watchModule = new Dirwatcher();
 const importModule = new Importer();
 
-
 watchModule.watch(process.argv.PATH = './data', process.argv.DELAY = 2500);
 
 watchModule.on('changed', (filesPaths) => { 
     filesPaths.forEach(filePath => onFileChange(filePath));
 });
-
 
 function onFileChange(filePath) {
     importModule.import(filePath).then(data => logImports(data, 'ASYNC'))
