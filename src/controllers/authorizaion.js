@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import uuid from 'uuid';
+import passport from 'passport';
+import Local from 'passport-local';
 
 export function authorizationController(credentials, secretCode) {
     return (req, res) => {
@@ -56,3 +58,15 @@ export function refreshTokenController(credentials, secretCode) {
     }
 }
 
+export function loginController(credentials) {
+    return (req, res) => {
+        passport.authenticate('local', () => res
+                                               .status(200)
+                                               .end()
+        )(req, res);
+    }
+}
+
+export function facebookLoginController() {}
+export function twitterLoginController() {}
+export function googleLoginController() {}
