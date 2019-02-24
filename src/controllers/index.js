@@ -1,14 +1,12 @@
 import productControllers from './products';
 import userControllers from './users';
-import { authorizationController, refreshTokenController, loginController, facebookLoginController, twitterLoginController, googleLoginController } from './authorizaion';
+import { authenticationController, refreshTokenController, loginController, facebookLoginRedirectController } from './authentication';
 
 export default {
     refreshToken: refreshTokenController,
-    authorization: authorizationController,
-    facebookLogin: facebookLoginController,
-    twitterLogin: twitterLoginController,
-    googleLogin: googleLoginController,
+    authentication: authenticationController,
     login: loginController,
+    facebookRedirect: facebookLoginRedirectController,
     products: productControllers,
     user: userControllers,
 }

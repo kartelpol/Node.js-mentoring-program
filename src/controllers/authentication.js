@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken';
 import uuid from 'uuid';
-import passport from 'passport';
-import Local from 'passport-local';
 
-export function authorizationController(credentials, secretCode) {
+export function authenticationController(credentials, secretCode) {
     return (req, res) => {
         const userInfo = req.body;
 
@@ -32,8 +30,8 @@ export function authorizationController(credentials, secretCode) {
             
         } else {
         res
-            .status(404)
-            .json({message: 'Not found'});
+            .status(401)
+            .json({message: 'Not authorized'});
         }
     }
 }
@@ -41,14 +39,11 @@ export function authorizationController(credentials, secretCode) {
 
 export function refreshTokenController(credentials, secretCode) {
     return (req, res) => {
-        let authorized = false;
         let refreshToken;
         let token;
 
         for (let key in credentials ) {
             if (credentials[key].refreshToken === req.body.refreshToken) {
-                authorized = true;
-
                 token = jwt.sign({ password: credentials[key].password }, secretCode, { expiresIn: 30 });
                 refreshToken = credentials[key].refreshToken = uuid();
             }
@@ -58,15 +53,10 @@ export function refreshTokenController(credentials, secretCode) {
     }
 }
 
-export function loginController(credentials) {
-    return (req, res) => {
-        passport.authenticate('local', () => res
-                                               .status(200)
-                                               .end()
-        )(req, res);
-    }
+export function loginController(req, res) {
+    res.status(200).end("You are successfully logged in");
 }
 
-export function facebookLoginController() {}
-export function twitterLoginController() {}
-export function googleLoginController() {}
+export function facebookLoginRedirectController(req, res) {
+    res.end('Successfully authenticate through facebook');
+}
