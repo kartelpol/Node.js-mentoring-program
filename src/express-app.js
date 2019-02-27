@@ -1,23 +1,41 @@
 import * as express from 'express';
-import routes from './routes';
-import controllers from './controllers';
+import passport from 'passport';
 import cookieParser from './middlewares/cookieParser';
 import queryParser from './middlewares/queryParser';
+import setupPassport from './middlewares/passport';
+import routers from './routers';
 
-const app = express();
+const app = configureExpress();
 
-app.use(cookieParser);
-app.use(queryParser);
-app.use(express.json());
+function configureExpress() {
+    const SECRET_CODE = 'secret';
+    const credentials = {
+        admin: {
+            password: 'adminpass',
+        }
+    }
 
-const router = express.Router();
-app.use(router);
+    const app = express();
 
-router.get(routes.getProducts, controllers.products.getAll);
-router.get(routes.getProduct, controllers.products.get);
-router.get(routes.getReviews, controllers.products.getReviews);
-router.post(routes.addProduct, controllers.products.add);
+    app.use(cookieParser);
+    app.use(queryParser);
+    app.use(express.json());
+    
+    app.use(require('express-session')({
+        resave: false,
+        saveUninitialized: false,
+        secret: 'secret'
+    }));
+    
+    app.use(passport.initialize());
+    app.use(passport.session());
+    
+    setupPassport(credentials);
+    app.use(routers.initializeAuthRouter(SECRET_CODE, credentials));
+    app.use(routers.initializeAPIRouter(SECRET_CODE));
 
-router.get(routes.getUsers, controllers.user.getAll);
+    return app;
+}
+
 
 export default app;
