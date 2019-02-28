@@ -8,7 +8,7 @@ export default {
     login: '/login',
 
     getProducts: '/api/products',
-    getProduct: '/api/products/:id',
+    getProduct: '/api/products/:name',
     getReviews: '/api/products/:id/reviews',
     addProduct: '/api/products',
     

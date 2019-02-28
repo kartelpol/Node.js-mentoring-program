@@ -1,21 +1,27 @@
 import jwt from 'jsonwebtoken';
 import uuid from 'uuid';
 
-export function authenticationController(credentials, secretCode) {
-    return (req, res) => {
+export function authenticationController(secretCode) {
+    return async (req, res) => {
         const userInfo = req.body;
+        const userResponse = await req.context.models.User.findAll({
+            where: {
+                name: userInfo.name,
+                password: userInfo.password
+            }
+        });
 
-        if (credentials[userInfo.name].password === userInfo.password) {
-            const token = jwt.sign( {password: userInfo.password}, secretCode, { expiresIn: 30 });
+        const user = userResponse[0];
+
+        if (user) {
+            const token = jwt.sign({password: userInfo.password}, secretCode, {expiresIn: 30});
             const refreshToken = uuid();
-
-            credentials[userInfo.name].refreshToken = refreshToken;
 
             const message = {
                 code: 200,
                 message: 'ok',
                 data: {
-                    user:  {
+                    user: {
                         email: userInfo.email,
                         username: userInfo.name
                     }
@@ -23,33 +29,41 @@ export function authenticationController(credentials, secretCode) {
                 refreshToken,
                 token,
             };
-            
-            res
-                .set({'X-access-token': token})
-                .json(message);
-            
+
+            user.refreshToken = refreshToken;
+            user.save()
+                .then(() => res.set({'X-access-token': token}).json(message))
+                .catch(err => res.send(err));
         } else {
-        res
-            .status(401)
-            .json({message: 'Not authorized'});
+            res
+                .status(401)
+                .json({message: 'Not authorized'});
         }
     }
 }
 
 
-export function refreshTokenController(credentials, secretCode) {
-    return (req, res) => {
+export function refreshTokenController(secretCode) {
+    return async (req, res) => {
         let refreshToken;
         let token;
 
-        for (let key in credentials ) {
-            if (credentials[key].refreshToken === req.body.refreshToken) {
-                token = jwt.sign({ password: credentials[key].password }, secretCode, { expiresIn: 30 });
-                refreshToken = credentials[key].refreshToken = uuid();
+        const userResponse = await req.context.models.User.findAll({
+            where: {
+                refreshToken: req.body.refreshToken,
             }
-        }
+        });
 
-        refreshToken ? res.json({ refreshToken, token }) : res.status(401).send('Unauthorized');
+        const user = userResponse[0];
+        if (user) {
+            token = jwt.sign({password: user.password}, secretCode, {expiresIn: 30});
+            refreshToken = user.refreshToken = uuid();
+            user.save()
+                .then(() => res.json({refreshToken, token}))
+                .catch(err => res.send(err));
+        } else {
+            res.status(401).send('Unauthorized');
+        }
     }
 }
 
