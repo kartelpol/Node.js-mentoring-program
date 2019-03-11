@@ -1,56 +1,55 @@
 import jwt from 'jsonwebtoken';
 import uuid from 'uuid';
+import db from './db/authentication';
 
-export function authenticationController(credentials, secretCode) {
-    return (req, res) => {
+export function authenticationController(secretCode) {
+    return async (req, res) => {
         const userInfo = req.body;
+        const user = await db.getUserByCredentials(userInfo.name, userInfo.password);
+        const getAuthSuccessMsg = (refreshToken, token) => ({
+            code: 200,
+            message: 'ok',
+            data: {
+                user: {
+                    email: userInfo.email,
+                    username: userInfo.name
+                }
+            },
+            refreshToken,
+            token,
+        });
 
-        if (credentials[userInfo.name].password === userInfo.password) {
-            const token = jwt.sign( {password: userInfo.password}, secretCode, { expiresIn: 30 });
-            const refreshToken = uuid();
-
-            credentials[userInfo.name].refreshToken = refreshToken;
-
-            const message = {
-                code: 200,
-                message: 'ok',
-                data: {
-                    user:  {
-                        email: userInfo.email,
-                        username: userInfo.name
-                    }
-                },
-                refreshToken,
-                token,
-            };
-            
-            res
-                .set({'X-access-token': token})
-                .json(message);
-            
+        if (user) {
+            refreshToken(user, secretCode, (refreshToken, token) => res.set({'X-access-token': token})
+                .json(getAuthSuccessMsg(refreshToken, token)));
         } else {
-        res
-            .status(401)
-            .json({message: 'Not authorized'});
+            res
+                .status(401)
+                .json({message: 'Not authorized'});
         }
     }
 }
 
+export function refreshTokenController(secretCode) {
+    return async (req, res) => {
+        const user = await db.getUserByRefreshToken(req.body.refreshToken);
 
-export function refreshTokenController(credentials, secretCode) {
-    return (req, res) => {
-        let refreshToken;
-        let token;
-
-        for (let key in credentials ) {
-            if (credentials[key].refreshToken === req.body.refreshToken) {
-                token = jwt.sign({ password: credentials[key].password }, secretCode, { expiresIn: 30 });
-                refreshToken = credentials[key].refreshToken = uuid();
-            }
+        if (user) {
+            refreshToken(user, secretCode, (refreshToken, token) => res.json({refreshToken, token}));
+        } else {
+            res.status(401).send('Unauthorized');
         }
-
-        refreshToken ? res.json({ refreshToken, token }) : res.status(401).send('Unauthorized');
     }
+}
+
+function refreshToken(user, secretCode, callback) {
+    const token = jwt.sign({password: user.password}, secretCode, {expiresIn: 30});
+    const refreshToken = uuid();
+
+    return db.setRefreshToken(user, refreshToken)
+        .then(() => callback(refreshToken, token))
+        .catch(err => res.send(err));
+
 }
 
 export function loginController(req, res) {

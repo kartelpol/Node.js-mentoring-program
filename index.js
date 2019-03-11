@@ -1,4 +1,11 @@
-import app from './src/express-app';
-const port = process.env.PORT || 8080;
+import configureServer from 'src/server';
+import db from 'src/postgres/models';
 
-app.listen(port, () => console.log(`App listenings on port ${port}!`));
+const port = process.env.PORT || 8080;
+const app = configureServer(db.models);
+
+db.sequelize
+    .sync()
+    .then(() => {
+        app.listen(port, () => console.log(`App listenings on port ${port}!`));
+    }); 

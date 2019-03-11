@@ -5,7 +5,7 @@ import Facebook from 'passport-facebook';
 const FACEBOOK_APP_ID = '612860929184827';
 const FACEBOOK_APP_SECRET = '133a3b9d9aefe3f82a4e6146b14f0a54';
 
-export default function setupPassport(credentials) {
+export default function setupPassport(user) {
     passport.serializeUser((user, done) => done(null, user));
     passport.deserializeUser((user, done) => done(null, user));
 
@@ -13,8 +13,12 @@ export default function setupPassport(credentials) {
             usernameField: 'name',
             passwordField: 'password'
         },
-        (username, password, done) =>  credentials[username] && credentials[username].password === password ?
-            done(null, credentials[username]) : done(null, false, "Basic")
+        (username, password, done) =>  user.findAll({
+            where: {
+                name: username,
+                password: password,
+            }
+        }).then(dbResponse => dbResponse[0] ? done(null, dbResponse[0] ) : done(null, false, "Basic"))
     ));
 
     passport.use(new Facebook.Strategy({
