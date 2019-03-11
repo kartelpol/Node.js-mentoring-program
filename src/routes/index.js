@@ -8,9 +8,9 @@ export default {
     login: '/login',
 
     getProducts: '/api/products',
-    getProduct: '/api/products/:name',
+    getProduct: '/api/products/:id',
     getReviews: '/api/products/:id/reviews',
     addProduct: '/api/products',
-    
+
     getUsers: '/api/users',
 }

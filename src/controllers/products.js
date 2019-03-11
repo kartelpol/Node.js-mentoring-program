@@ -1,29 +1,25 @@
+import db from './db/products';
+
 function getAll(req, res) {
-    req.context.models.Product.findAll()
+    return db.getProducts()
         .then(products => res.send(products))
         .catch(err => res.send(err));
 }
 
 function get(req, res) {
-    req.context.models.Product.findAll({where: {name: req.params.name}})
+    return db.getProductById(req.params.id)
         .then(product => res.send(product))
         .catch(err => res.send(err));
 }
 
 function add(req, res) {
-    req.context.models.Product.create({
-        name: req.params.name,
-    }, {})
+    return db.addProduct(req.params.name)
         .then(product => res.json(product))
         .catch(err => res.send(err));
 }
 
 function getReviews(req, res) {
-    req.context.models.Review.findAll({
-        where: {
-            productId: req.params.id
-        }
-    })
+    return db.getProductReviews(req.params.id)
         .then(reviews => res.send(reviews))
         .catch(err => res.send(err));
 }
