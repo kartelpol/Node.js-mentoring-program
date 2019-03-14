@@ -1,11 +1,17 @@
 import configureServer from 'src/server';
-import db from 'src/postgres/models';
+import postgresDB from 'src/postgres/models';
+import initialize from 'src/mongo/mongoose';
 
-const port = process.env.PORT || 8080;
-const app = configureServer(db.models);
+async function runServer() {
+    const port = process.env.PORT || 8080;
+    const mongoDb = {models: await initialize()};
 
-db.sequelize
-    .sync()
-    .then(() => {
-        app.listen(port, () => console.log(`App listenings on port ${port}!`));
-    }); 
+    const app = configureServer(postgresDB.models, mongoDb.models);
+    postgresDB.sequelize
+        .sync()
+        .then(() => {
+            app.listen(port, () => console.log(`App listening on port ${port}!`));
+        });
+}
+
+runServer();

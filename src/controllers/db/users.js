@@ -1,5 +1,13 @@
-function getAll() {
-    return req.context.models.User.findAll()
-}
+import {getModels, getURLParam} from './utils';
 
-export default {getAll};
+export const queries = {
+    postgres: {
+        getAll: (req) => getModels(req).User.findAll()
+    },
+    mongo: {
+        getAll: (req) => getModels(req).User.find({}),
+        deleteUser: (req) => getModels(req).User.deleteOne({
+            _id: getURLParam(req, 'id')
+        }),
+    }
+};

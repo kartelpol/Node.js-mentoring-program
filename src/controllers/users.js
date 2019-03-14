@@ -1,9 +1,15 @@
-import db from './db/users';
+import {getData} from './db';
 
 function getAll(req, res) {
-    return db.getAll()
+    return getData('getAll', req)
         .then(users => res.send(users))
         .catch(err => res.send(err));
 }
 
-export default {getAll};
+function deleteUser(req, res) {
+    return getData('deleteUser', req)
+        .then(result => res.send(result))
+        .catch(err => res.status(400).end(err.message));
+}
+
+export default {getAll, delete: deleteUser};

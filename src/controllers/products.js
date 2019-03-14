@@ -1,27 +1,33 @@
-import db from './db/products';
+import {getData} from './db';
 
 function getAll(req, res) {
-    return db.getProducts()
+    return getData('getProducts', req)
         .then(products => res.send(products))
         .catch(err => res.send(err));
 }
 
 function get(req, res) {
-    return db.getProductById(req.params.id)
+    return getData('getProductById', req)
         .then(product => res.send(product))
         .catch(err => res.send(err));
 }
 
 function add(req, res) {
-    return db.addProduct(req.params.name)
+    return getData('addProduct', req)
         .then(product => res.json(product))
         .catch(err => res.send(err));
 }
 
 function getReviews(req, res) {
-    return db.getProductReviews(req.params.id)
-        .then(reviews => res.send(reviews))
+    return getData('getProductReviews', req)
+        .then(result => res.send(result.reviews.toString()))
         .catch(err => res.send(err));
 }
 
-export default {getAll, get, add, getReviews}
+function deleteProduct(req, res) {
+    return getData('deleteProduct', req)
+        .then(result => res.send(result))
+        .catch(err => res.status(400).end(err.message))
+}
+
+export default {getAll, get, add, getReviews, delete: deleteProduct}
