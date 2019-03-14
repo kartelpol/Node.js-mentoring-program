@@ -1,6 +1,12 @@
 import productControllers from './products';
 import userControllers from './users';
-import { authenticationController, refreshTokenController, loginController, facebookLoginRedirectController } from './authentication';
+import cityControllers from './cities';
+import {
+    authenticationController,
+    refreshTokenController,
+    loginController,
+    facebookLoginRedirectController
+} from './authentication';
 
 export default {
     refreshToken: refreshTokenController,
@@ -8,5 +14,6 @@ export default {
     login: loginController,
     facebookRedirect: facebookLoginRedirectController,
     products: productControllers,
-    user: userControllers,
+    users: userControllers,
+    cities: cityControllers,
 }

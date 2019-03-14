@@ -1,19 +1,32 @@
-function getProducts() {
-    return req.context.models.Product.findAll();
-}
+import {getModels, getURLParam} from './utils';
 
-function getProductById(id) {
-    return req.context.models.Product.findAll({where: {id}});
-}
+export const queries = {
+    postgres: {
+        getProducts: (req) => getModels(req).Product.findAll(),
+        getProductById: (req) => getModels(req).Product.findAll({
+            where: {
+                id: getURLParam(req, 'id')
+            }
+        }),
+        addProduct: (req) => getModels(req).Product.create({
+            name: req.body.name
+        }, {}),
+        getProductReviews: (req) => getModels(req).Review.findAll({
+            where: {
+                productId: getURLParam(req, 'id')
+            }
+        })
+    },
+    mongo: {
+        getProducts: (req) => getModels(req).Product.find({}),
+        getProductById: (req) => getModels(req).Product.findById(getURLParam(req, 'id')),
+        addProduct: (req) => getModels(req).Product.create({
+            name: req.body.name
+        }),
+        getProductReviews: (req) => getModels(req).Product.findById(getURLParam(req, 'id'), 'reviews'),
+        deleteProduct: (req) => getModels(req).Product.deleteOne({
+            _id: getURLParam(req, 'id')
+        }),
+    }
+};
 
-function addProduct(name) {
-    return req.context.models.Product.create({name}, {})
-}
-
-function getProductReviews(productId) {
-    return req.context.models.Review.findAll({
-        where: {productId}
-    });
-}
-
-export default {getProducts, getProductById, addProduct, getProductReviews}
