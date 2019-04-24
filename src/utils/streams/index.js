@@ -20,32 +20,32 @@ function checkAction(chosenAction) {
     switch (chosenAction) {
         case 'reverse':
             actions.reverse();
-        break;
+            break;
         case 'transform':
             actions.transform();
-        break;
+            break;
         case 'outputFile':
             checkExtraParam('file');
             actions.outputFile(args.file);
-        break;
+            break;
         case 'convertFromFile':
-            checkExtraParam('file');
+            checkExtraParam('file'); // to test the functionality use ../../../data/countries.csv
             actions.convertFromFile(args.file);
-        break;
+            break;
         case'convertToFile':
-            checkExtraParam('file');
+            checkExtraParam('file'); // to test the functionality use ../../../data/countries.csv
             actions.convertToFile(args.file);
-        break;
+            break;
         case'cssBundler':
-            checkExtraParam('path');
+            checkExtraParam('path'); // to test the functionality use ../../../data/css as a path parameter
             actions.buildCss(args.path);
-        break;
+            break;
     }
 }
 
 function checkExtraParam(param) {
     if (!args[param]) {
-        printError(errorMsgs.params.wrong_number(param));        
+        printError(errorMsgs.params.wrong_number(param));
     }
 }
 
