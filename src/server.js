@@ -5,7 +5,7 @@ import cookieParser from './middlewares/cookieParser';
 import queryParser from './middlewares/queryParser';
 import routers from './routers';
 
-export default function configureServer(postgres, mongo) {
+export default function configureServer(postgres = [], mongo = []) {
     const SECRET_CODE = 'secret';
     const app = express();
 

@@ -1,7 +1,7 @@
-import * as _ from 'lodash';
-import mongoose from 'mongoose';
-import schemas from './schemas';
-import data from '../seeders/data';
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const schemas = require('./schemas');
+const data = require('../seeders/data');
 
 function createModels() {
     const models = {};
@@ -43,9 +43,8 @@ function initialize() {
     mongoose.connect('mongodb://localhost:27017/market_db', {useNewUrlParser: true});
 
     const models = createModels();
-    addValidation(models);
+    //addValidation(models);
     return fillDb(models).then(() => models);
 }
 
-export default initialize;
-
+module.exports = initialize;
