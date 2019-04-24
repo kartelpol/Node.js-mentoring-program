@@ -12,10 +12,10 @@ function getCollection(collection = 'cities') {
 
 function getDb() {
     return new Promise((resolve, reject) => {
-        const url = 'mongodb_driver://localhost:27017/market_db';
+        const url = 'mongodb://localhost:27017/market_db';
 
         MongoClient
-            .connect(url, {useNewUrlParser: true}, (err, client) => {
+            .connect(url, (err, client) => {
                 if (err) reject(err);
                 const db = client.db('market_db');
                 resolve(db);

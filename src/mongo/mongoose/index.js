@@ -43,7 +43,7 @@ function initialize() {
     mongoose.connect('mongodb://localhost:27017/market_db', {useNewUrlParser: true});
 
     const models = createModels();
-    addValidation(models);
+    //addValidation(models);
     return fillDb(models).then(() => models);
 }
 

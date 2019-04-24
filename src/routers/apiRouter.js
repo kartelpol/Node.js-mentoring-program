@@ -5,7 +5,7 @@ import controllers from '../controllers';
 
 export default function initializeAPIRouter(SECRET_CODE) {
     const apiRouter = express.Router();
-    //apiRouter.use(verifyAuthentication(SECRET_CODE));
+    //apiRouter.use(verifyAuthentication(SECRET_CODE)); // disabled to don't have to put JWT token with every query
 
     apiRouter.param('db', (req, res, next, db) => {
         const isDbExists = db === 'mongo' || db === 'postgres';
@@ -23,7 +23,7 @@ export default function initializeAPIRouter(SECRET_CODE) {
     apiRouter.get(routes.getCities, controllers.cities.getAll);
     apiRouter.post(routes.addCity, controllers.cities.add);
     apiRouter.put(routes.updateCity, controllers.cities.update);
-    apiRouter.delete(routes.deleteProduct, controllers.products.delete);
+    apiRouter.delete(routes.deleteCity, controllers.cities.delete);
 
     apiRouter.get(routes.getUsers, controllers.users.getAll);
     apiRouter.delete(routes.deleteUser, controllers.users.delete);
