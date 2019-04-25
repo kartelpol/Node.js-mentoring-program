@@ -7,10 +7,17 @@ export default {
     googleLogin: '/login/google',
     login: '/login',
 
-    getProducts: '/api/products',
-    getProduct: '/api/products/:id',
-    getReviews: '/api/products/:id/reviews',
-    addProduct: '/api/products',
+    getProducts: '/api/:db?/products',
+    getProduct: '/api/:db?/products/:id',
+    getReviews: '/api/:db?/products/:id/reviews',
+    addProduct: '/api/:db?/products',
+    deleteProduct: '/api/products/:id',
 
-    getUsers: '/api/users',
+    getUsers: '/api/:db?/users',
+    deleteUser: '/api/users/:id',
+
+    getCities: '/api/cities',
+    addCity: '/api/cities',
+    updateCity: '/api/cities/:id',
+    deleteCity: '/api/cities/:id'
 }

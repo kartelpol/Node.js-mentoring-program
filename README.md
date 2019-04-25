@@ -15,4 +15,11 @@ requirements: https://epa.ms/nodejs18-hw3
 placed on "streams" branch
 to run use: node src/utils/streams/index.js
 
+HOMEWORK 7:\
+NoSQL DATABASES. ODM\
+requirements: https://epa.ms/nodejs18-hw7\
+branch "mongo"\
+to get random city use src/http-servers/json-db-server.js
+to test api run the whole application "npm start"
+
 
