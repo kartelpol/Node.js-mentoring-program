@@ -1,7 +1,7 @@
-import * as _ from 'lodash';
-import mongoose from 'mongoose';
-import schemas from './schemas';
-import data from '../seeders/data';
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const schemas = require('./schemas');
+const data = require('../seeders/data');
 
 function createModels() {
     const models = {};
@@ -47,5 +47,4 @@ function initialize() {
     return fillDb(models).then(() => models);
 }
 
-export default initialize;
-
+module.exports = initialize;

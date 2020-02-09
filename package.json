@@ -43,6 +43,8 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.42.1",
     "sequelize-cli": "^5.4.0",
+    "swagger": "^0.7.5",
+    "swagger-express-mw": "^0.7.0",
     "through2": "^3.0.0",
     "uuid": "^3.3.2",
     "winston": "^3.1.0"
@@ -57,6 +59,7 @@
     "clean-webpack-plugin": "^1.0.0",
     "jsdoc": "^3.5.5",
     "nodemon": "^1.18.7",
+    "swagger-editor": "^3.6.27",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2",
     "webpack-node-externals": "^1.7.2",

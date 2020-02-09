@@ -59,4 +59,4 @@ const schemas = {
     'City': citySchema
 };
 
-export default schemas;
+module.exports = schemas;
